@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ESSENCIAL para celular -->
   <title>Jogo de Encher Copos</title>
   <style>
     body {
@@ -17,7 +18,7 @@
       margin: 10px;
     }
 
-    /* Configuração padrão (computador) */
+    /* Estilo padrão (computador) */
     #copo {
       width: 120px;
       height: 400px;
@@ -51,26 +52,6 @@
       background: #45a049;
     }
 
-    /* Configuração para celular (dobro do tamanho) */
-    @media (max-width: 768px) {
-      #copo {
-        width: 80%;       /* mais largo */
-        height: 80vh;     /* bem mais alto */
-      }
-
-      button {
-        display: block;
-        width: 90%;
-        margin: 15px auto;
-        padding: 24px;    /* dobro do padding */
-        font-size: 32px;  /* dobro da fonte */
-      }
-
-      h1, p {
-        font-size: clamp(28px, 6vw, 40px); /* dobro da fonte */
-      }
-    }
-
     /* Tremor */
     @keyframes tremer {
       0% { transform: translateX(0); }
@@ -89,9 +70,33 @@
     }
     .confete {
       position: absolute;
-      width: 20px; height: 20px; /* maior no celular */
+      width: 12px; height: 12px;
       border-radius: 50%;
       animation: cair 2s ease-out forwards;
+    }
+
+    /* --- MEDIA QUERY NO FINAL --- */
+    @media (max-width: 768px) {
+      #copo {
+        width: 80%;       /* mais largo */
+        height: 80vh;     /* bem mais alto */
+      }
+
+      button {
+        display: block;
+        width: 90%;
+        margin: 15px auto;
+        padding: 24px;    /* dobro do padding */
+        font-size: 32px;  /* dobro da fonte */
+      }
+
+      h1, p {
+        font-size: clamp(28px, 6vw, 40px); /* dobro da fonte */
+      }
+
+      .confete {
+        width: 20px; height: 20px; /* confete maior no celular */
+      }
     }
   </style>
 </head>

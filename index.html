@@ -17,6 +17,7 @@
       margin: 10px;
     }
 
+    /* Configuração padrão (computador) */
     #copo {
       width: 120px;
       height: 400px;
@@ -50,40 +51,45 @@
       background: #45a049;
     }
 
+    /* Configuração para celular (dobro do tamanho) */
     @media (max-width: 768px) {
       #copo {
-        width: 60%;
-        height: 50vh;
+        width: 80%;       /* mais largo */
+        height: 80vh;     /* bem mais alto */
       }
+
       button {
         display: block;
-        width: 80%;
-        margin: 10px auto;
-        padding: 14px;
-        font-size: 18px;
+        width: 90%;
+        margin: 15px auto;
+        padding: 24px;    /* dobro do padding */
+        font-size: 32px;  /* dobro da fonte */
       }
+
       h1, p {
-        font-size: clamp(18px, 4vw, 26px);
+        font-size: clamp(28px, 6vw, 40px); /* dobro da fonte */
       }
     }
 
+    /* Tremor */
     @keyframes tremer {
       0% { transform: translateX(0); }
-      20% { transform: translateX(-5px); }
-      40% { transform: translateX(5px); }
-      60% { transform: translateX(-5px); }
-      80% { transform: translateX(5px); }
+      20% { transform: translateX(-10px); }
+      40% { transform: translateX(10px); }
+      60% { transform: translateX(-10px); }
+      80% { transform: translateX(10px); }
       100% { transform: translateX(0); }
     }
     .treme { animation: tremer 2s; }
 
+    /* Confete */
     @keyframes cair {
       0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(400px); opacity: 0; }
+      100% { transform: translateY(600px); opacity: 0; }
     }
     .confete {
       position: absolute;
-      width: 12px; height: 12px;
+      width: 20px; height: 20px; /* maior no celular */
       border-radius: 50%;
       animation: cair 2s ease-out forwards;
     }
@@ -177,7 +183,6 @@
       }
     }
 
-    // Novo: reinicia o jogo inteiro
     function reiniciar() {
       quantidade = 0;
       rodada = 0;
@@ -187,7 +192,6 @@
       document.getElementById("mensagem").innerText = "🔄 Jogo reiniciado!";
     }
 
-    // confete
     function soltarConfete() {
       for (let i = 0; i < 25; i++) {
         const confete = document.createElement("div");
@@ -200,14 +204,12 @@
       }
     }
 
-    // tremor
     function tremerCopo() {
       const copo = document.getElementById("copo");
       copo.classList.add("treme");
       setTimeout(() => copo.classList.remove("treme"), 2000);
     }
 
-    // ranking final
     function mostrarRanking() {
       let ranking;
       if (pontuacao >= 40) {

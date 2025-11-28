@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Jogo de Encher Copos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    h1, p {
+      font-size: clamp(16px, 2.5vw, 22px);
+      margin: 10px;
+    }
+
+    #copo {
+      width: 40%;
+      max-width: 150px;
+      height: 40vh; /* proporcional à tela */
+      border: 3px solid #333;
+      margin: 20px auto;
+      position: relative;
+      background: #eee;
+    }
+
+    #liquido {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: lightblue;
+      height: 0;
+      transition: height 0.5s ease-in-out;
+    }
+
+    button {
+      display: block;
+      width: 80%;
+      max-width: 250px;
+      margin: 10px auto;
+      padding: 12px;
+      font-size: clamp(16px, 2.5vw, 20px);
+      border-radius: 8px;
+      border: none;
+      background: #4CAF50;
+      color: white;
+    }
+
+    button:active {
+      background: #45a049;
+    }
+
+    /* Tremor mais longo */
+    @keyframes tremer {
+      0% { transform: translateX(0); }
+      20% { transform: translateX(-5px); }
+      40% { transform: translateX(5px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
+      100% { transform: translateX(0); }
+    }
+    .treme { animation: tremer 2s; }
+
+    /* Confete mais lento */
+    @keyframes cair {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(400px); opacity: 0; }
+    }
+    .confete {
+      position: absolute;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      animation: cair 2s ease-out forwards;
+    }
+  </style>
+</head>
+<body>
+  <h1>Jogo de Encher Copos 🥤</h1>
+  <p id="objetivo"></p>
+
+  <div id="copo">
+    <div id="liquido"></div>
+  </div>
+
+  <p>Quantidade atual: <span id="quantidade">0</span> ml</p>
+  <p>Pontuação: <span id="pontuacao">0</span></p>
+
+  <button onclick="adicionar(50)">+50 ml</button>
+  <button onclick="adicionar(100)">+100 ml</button>
+  <button onclick="adicionar(200)">+200 ml</button>
+  <button onclick="resetar()">Resetar rodada</button>
+
+  <p id="mensagem"></p>
+
+  <!-- Sons -->
+  <audio id="somAcerto" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+  <audio id="somErro" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg"></audio>
+
+  <script>
+    let quantidade = 0;
+    let rodada = 0;
+    let pontuacao = 0;
+    const totalRodadas = 5;
+    let objetivos = [];
+
+    function gerarObjetivos() {
+      objetivos = [];
+      for (let i = 0; i < totalRodadas; i++) {
+        let valor = (Math.floor(Math.random() * 30) + 1) * 50; // múltiplos de 50 até 1500
+        objetivos.push(valor);
+      }
+    }
+
+    const copoAltura = window.innerHeight * 0.4; // altura proporcional à tela
+
+    function atualizarCopo() {
+      const liquido = document.getElementById("liquido");
+      const objetivoAtual = objetivos[rodada];
+      const altura = (quantidade / objetivoAtual) * copoAltura;
+      liquido.style.height = Math.min(altura, copoAltura) + "px";
+      document.getElementById("quantidade").innerText = quantidade;
+      document.getElementById("objetivo").innerText = 
+        "Rodada " + (rodada+1) + ": Encha até " + objetivoAtual + " ml";
+      document.getElementById("pontuacao").innerText = pontuacao;
+    }
+
+    function adicionar(valor) {
+      quantidade += valor;
+      atualizarCopo();
+      verificar();
+    }
+
+    function verificar() {
+      const msg = document.getElementById("mensagem");
+      const objetivoAtual = objetivos[rodada];
+      if (quantidade === objetivoAtual) {
+        msg.innerText = "🎉 Parabéns! Você acertou!";
+        pontuacao += 10;
+        document.getElementById("somAcerto").play();
+        soltarConfete();
+        setTimeout(proximaRodada, 2000);
+      } else if (quantidade > objetivoAtual) {
+        msg.innerText = "⚠️ Você colocou líquido demais!";
+        pontuacao -= 5;
+        document.getElementById("somErro").play();
+        tremerCopo();
+        setTimeout(proximaRodada, 2000);
+      } else {
+        msg.innerText = "Continue enchendo...";
+      }
+      document.getElementById("pontuacao").innerText = pontuacao;
+    }
+
+    function proximaRodada() {
+      rodada++;
+      if (rodada < objetivos.length) {
+        quantidade = 0;
+        atualizarCopo();
+        document.getElementById("mensagem").innerText = "";
+      } else {
+        mostrarRanking();
+      }
+    }
+
+    function resetar() {
+      quantidade = 0;
+      atualizarCopo();
+      document.getElementById("mensagem").innerText = "";
+    }
+
+    // animação de confete
+    function soltarConfete() {
+      for (let i = 0; i < 25; i++) {
+        const confete = document.createElement("div");
+        confete.className = "confete";
+        confete.style.left = (Math.random() * window.innerWidth * 0.9) + "px";
+        confete.style.background = 
+          ["red","blue","green","yellow","purple"][Math.floor(Math.random()*5)];
+        document.body.appendChild(confete);
+        setTimeout(() => confete.remove(), 2000);
+      }
+    }
+
+    // animação de tremor
+    function tremerCopo() {
+      const copo = document.getElementById("copo");
+      copo.classList.add("treme");
+      setTimeout(() => copo.classList.remove("treme"), 2000);
+    }
+
+    // ranking final
+    function mostrarRanking() {
+      let ranking;
+      if (pontuacao >= 40) {
+        ranking = "🏅 Excelente!";
+      } else if (pontuacao >= 20) {
+        ranking = "🙂 Bom!";
+      } else {
+        ranking = "📚 Precisa praticar!";
+      }
+      document.getElementById("mensagem").innerText = 
+        "🏆 Fim do jogo! Sua pontuação final foi: " + pontuacao + " → " + ranking;
+    }
+
+    gerarObjetivos();
+    atualizarCopo();
+  </script>
+</body>
+</html>

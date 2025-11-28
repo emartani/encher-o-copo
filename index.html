@@ -140,14 +140,16 @@
     const copoAltura = 400;
 
     function atualizarCopo() {
-      const liquido = document.getElementById("liquido");
-      const objetivoAtual = objetivos[rodada];
-      const altura = (quantidade / objetivoAtual) * copoAltura;
-      liquido.style.height = Math.min(altura, copoAltura) + "px";
-      document.getElementById("quantidade").innerText = quantidade;
-      document.getElementById("objetivo").innerText = 
-        "Rodada " + (rodada+1) + ": Encha até " + objetivoAtual + " ml";
-      document.getElementById("pontuacao").innerText = pontuacao;
+        const liquido = document.getElementById("liquido");
+        const copo = document.getElementById("copo");
+        const copoAltura = copo.offsetHeight; // altura real do copo na tela
+        const objetivoAtual = objetivos[rodada];
+        const altura = (quantidade / objetivoAtual) * copoAltura;
+        liquido.style.height = Math.min(altura, copoAltura) + "px";
+        document.getElementById("quantidade").innerText = quantidade;
+        document.getElementById("objetivo").innerText = 
+            "Rodada " + (rodada+1) + ": Encha até " + objetivoAtual + " ml";
+        document.getElementById("pontuacao").innerText = pontuacao;
     }
 
     function adicionar(valor) {

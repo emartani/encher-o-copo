@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ESSENCIAL para celular -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jogo de Encher Copos</title>
   <style>
     body {
@@ -78,24 +78,24 @@
     /* --- MEDIA QUERY NO FINAL --- */
     @media (max-width: 768px) {
       #copo {
-        width: 80%;       /* mais largo */
-        height: 80vh;     /* bem mais alto */
+        width: 40%;       /* metade da largura anterior (era 80%) */
+        height: 40vh;     /* metade da altura anterior (era 80vh) */
       }
 
       button {
         display: block;
-        width: 90%;
-        margin: 15px auto;
-        padding: 24px;    /* dobro do padding */
-        font-size: 32px;  /* dobro da fonte */
+        width: 70%;       /* menor largura (era 90%) */
+        margin: 8px auto;
+        padding: 12px;    /* metade do padding (era 24px) */
+        font-size: 16px;  /* metade da fonte (era 32px) */
       }
 
       h1, p {
-        font-size: clamp(28px, 6vw, 40px); /* dobro da fonte */
+        font-size: clamp(14px, 3vw, 20px); /* metade da fonte (era até 40px) */
       }
 
       .confete {
-        width: 20px; height: 20px; /* confete maior no celular */
+        width: 10px; height: 10px; /* metade do tamanho (era 20px) */
       }
     }
   </style>
